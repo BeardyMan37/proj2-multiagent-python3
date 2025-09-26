@@ -289,28 +289,22 @@ def betterEvaluationFunction(currentGameState):
     ghostStates = currentGameState.getGhostStates()
     capsules = currentGameState.getCapsules()
 
-    # Base score
     score = currentGameState.getScore()
 
-    # Food heuristic: closer food is better
     if food:
         minFoodDist = min(util.manhattanDistance(pos, f) for f in food)
         score += 5.0 / (minFoodDist + 1)
 
-    # Capsule heuristic: encourage eating capsules
     if capsules:
         minCapDist = min(util.manhattanDistance(pos, c) for c in capsules)
         score += 3.0 / (minCapDist + 1)
 
-    # Ghosts
     for ghost in ghostStates:
         gPos = ghost.getPosition()
         gDist = util.manhattanDistance(pos, gPos)
         if ghost.scaredTimer > 0:
-            # incentivize chasing scared ghosts
             score += 10.0 / (gDist + 1)
         else:
-            # avoid active ghosts
             if gDist <= 1:
                 score -= 500
             else:
